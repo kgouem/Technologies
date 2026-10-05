@@ -25,6 +25,33 @@ function App() {
   setName("");
   setCity("");
 };
+const deleteStudent = async (id) => {
+await fetch(`http://localhost:3000/api/students/${id}`, {
+  method: "DELETE",
+});
+setStudents(students.filter((student) => student.id !== id));
+};
+const updateStudent = async (id) => {
+  const newName = prompt("Enter new student name:");
+  const newCity = prompt("Enter new city:");
+  const response = await fetch(`http://localhost:3000/api/students/${id}`, {
+  method: "PUT",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    name: newName,
+    city: newCity,
+  }),
+}); 
+const updatedStudent = await response.json();
+
+setStudents(
+  students.map((student) =>
+    student.id === id ? updatedStudent : student
+  )
+);
+};
   return (
     <div>
       <h1>StudentConnect</h1>
@@ -46,7 +73,15 @@ function App() {
 </button>
       <h2>Students</h2>
       {students.map((student) => (
-  <p key={student.id}>{student.name} - {student.city}</p>
+  <div key={student.id}>
+  <span>{student.name} - {student.city}</span>
+  <button onClick={() => deleteStudent(student.id)}>
+    Delete
+  </button>
+  <button onClick={() => updateStudent(student.id)}>
+  Edit
+</button>
+</div>
 ))}
     </div>
   )

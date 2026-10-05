@@ -41,6 +41,38 @@ app.post("/api/students", async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
+app.delete("/api/students/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await pool.query(
+      "DELETE FROM students WHERE id = $1",
+      [id]
+    );
+
+    res.json({ message: "Student deleted" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
+app.put("/api/students/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, city } = req.body;
+
+    const result = await pool.query(
+      "UPDATE students SET name = $1, city = $2 WHERE id = $3 RETURNING *",
+      [name, city, id]
+    );
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Database error" });
+  }
+});
 app.listen(PORT, () => {
   console.log(`StudentConnect API is running on port ${PORT}`);
 });
