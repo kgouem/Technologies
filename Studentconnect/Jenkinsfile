@@ -1,0 +1,29 @@
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout Verification') {
+            steps {
+                echo 'StudentConnect source code retrieved from GitHub!'
+                sh 'git --version'
+            }
+        }
+
+        stage('Project Verification') {
+            steps {
+                echo 'Checking StudentConnect project files...'
+                sh 'ls -la Studentconnect'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'StudentConnect CI pipeline completed successfully!'
+        }
+        failure {
+            echo 'StudentConnect CI pipeline failed. Check the logs.'
+        }
+    }
+}
