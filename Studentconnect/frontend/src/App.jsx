@@ -4,12 +4,12 @@ function App() {
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
   useEffect(() => {
-    fetch("http://localhost:3000/api/students")
+    fetch("http://localhost:3001/api/students")
       .then((response) => response.json())
       .then((data) => setStudents(data))
 }, []);
   const addStudent = async () => {
-  const response = await fetch("http://localhost:3000/api/students", {
+  const response = await fetch("http://localhost:3001/api/students", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -26,7 +26,7 @@ function App() {
   setCity("");
 };
 const deleteStudent = async (id) => {
-await fetch(`http://localhost:3000/api/students/${id}`, {
+await fetch(`http://localhost:3001/api/students/${id}`, {
   method: "DELETE",
 });
 setStudents(students.filter((student) => student.id !== id));
@@ -34,7 +34,7 @@ setStudents(students.filter((student) => student.id !== id));
 const updateStudent = async (id) => {
   const newName = prompt("Enter new student name:");
   const newCity = prompt("Enter new city:");
-  const response = await fetch(`http://localhost:3000/api/students/${id}`, {
+  const response = await fetch(`http://localhost:3001/api/students/${id}`, {
   method: "PUT",
   headers: {
     "Content-Type": "application/json",
@@ -88,3 +88,4 @@ setStudents(
 }
 
 export default App
+
