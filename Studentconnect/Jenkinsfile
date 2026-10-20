@@ -2,28 +2,49 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'NodeJS-22'
+    }
+
     stages {
-        stage('Checkout Verification') {
+        stage('Verify Environment') {
             steps {
-                echo 'StudentConnect source code retrieved from GitHub!'
-                sh 'git --version'
+                sh 'node --version'
+                sh 'npm --version'
             }
         }
 
-        stage('Project Verification') {
+        stage('Install Backend Dependencies') {
             steps {
-                echo 'Checking StudentConnect project files...'
-                sh 'ls -la Studentconnect'
+                dir('Studentconnect/backend') {
+                    sh 'npm ci'
+                }
+            }
+        }
+
+        stage('Install Frontend Dependencies') {
+            steps {
+                dir('Studentconnect/frontend') {
+                    sh 'npm ci'
+                }
+            }
+        }
+
+        stage('Build React Frontend') {
+            steps {
+                dir('Studentconnect/frontend') {
+                    sh 'npm run build'
+                }
             }
         }
     }
 
     post {
         success {
-            echo 'StudentConnect CI pipeline completed successfully!'
+            echo 'StudentConnect CI build completed successfully!'
         }
         failure {
-            echo 'StudentConnect CI pipeline failed. Check the logs.'
+            echo 'StudentConnect CI build failed. Check console output.'
         }
     }
 }
