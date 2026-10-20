@@ -22,6 +22,14 @@ pipeline {
             }
         }
 
+stage('Test Backend API') {
+    steps {
+        dir('Studentconnect/backend') {
+            sh 'npm test'
+        }
+    }
+}
+
         stage('Install Frontend Dependencies') {
             steps {
                 dir('Studentconnect/frontend') {

@@ -73,6 +73,12 @@ app.put("/api/students/:id", async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
-app.listen(PORT, () => {
-  console.log(`StudentConnect API is running on port ${PORT}`);
-});
+
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`StudentConnect API is running on port ${PORT}`);
+  });
+}
+
+module.exports = { app, pool };
+
